@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+
+import ReduxTest from "./components/ReduxTest";
 
 class App extends Component {
   render() {
@@ -19,6 +21,7 @@ class App extends Component {
           >
             Learn React
           </a>
+          <ReduxTest />
         </header>
       </div>
     );
