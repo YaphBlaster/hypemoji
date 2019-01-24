@@ -1,28 +1,29 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 
-import ReduxTest from "./components/ReduxTest";
+import Home from "./containers/Home";
+
+// Toasts
+import { ToastContainer } from "react-toastify";
 
 class App extends Component {
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          <ReduxTest />
+          <Home />
         </header>
+        <ToastContainer
+          position="bottom-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnVisibilityChange
+          draggable
+          pauseOnHover
+        />
       </div>
     );
   }

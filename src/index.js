@@ -9,6 +9,12 @@ import { Provider } from "react-redux";
 import { persistor, store } from "./store";
 import { PersistGate } from "redux-persist/integration/react";
 
+// Semantic Styles
+import "semantic-ui-css/semantic.min.css";
+
+// Toastify Styles
+import "react-toastify/dist/ReactToastify.css";
+
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
