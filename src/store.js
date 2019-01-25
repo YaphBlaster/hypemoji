@@ -5,7 +5,9 @@ import autoMergeLevel2 from "redux-persist/es/stateReconciler/autoMergeLevel2";
 import reducer from "./reducers";
 
 const enhancers = compose(
-  window.devToolsExtension ? window.devToolsExtension() : f => f
+  window.__REDUX_DEVTOOLS_EXTENSION__
+    ? window.__REDUX_DEVTOOLS_EXTENSION__()
+    : f => f
 );
 
 const persistConfig = {

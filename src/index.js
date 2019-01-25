@@ -15,6 +15,9 @@ import "semantic-ui-css/semantic.min.css";
 // Toastify Styles
 import "react-toastify/dist/ReactToastify.css";
 
+// React-Loaders Styles
+import "loaders.css";
+
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
