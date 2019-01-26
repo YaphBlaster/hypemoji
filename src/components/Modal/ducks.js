@@ -1,8 +1,10 @@
 //ACTIONS
 const SET_PRIMARY_MOJI = "SET_PRIMARY_MOJI";
+const SET_SECONDARY_MOJI = "SET_SECONDARY_MOJI";
 
 const initialState = {
-  primaryMoji: ""
+  primaryMoji: "",
+  secondaryMoji: ""
 };
 
 // Reducer input === current state
@@ -17,6 +19,12 @@ export function reducer(state = initialState, action) {
         primaryMoji: action.mojiID
       };
     }
+    case SET_SECONDARY_MOJI: {
+      return {
+        ...state,
+        secondaryMoji: action.mojiID
+      };
+    }
     default:
       return state;
   }
@@ -26,6 +34,13 @@ export function reducer(state = initialState, action) {
 export function setPrimaryMoji(mojiID) {
   return {
     type: SET_PRIMARY_MOJI,
+    mojiID
+  };
+}
+
+export function setSecondaryMoji(mojiID) {
+  return {
+    type: SET_SECONDARY_MOJI,
     mojiID
   };
 }

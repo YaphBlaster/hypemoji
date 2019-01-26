@@ -14,15 +14,24 @@ import { connect } from "react-redux";
 
 import styled from "styled-components/macro";
 
+import { addBackToTop } from "vanilla-back-to-top";
+
 const RouterContainer = styled.div`
   width: 80%;
+  padding-bottom: 100px;
+  padding-top: 20px;
 `;
 
 const Navbar = styled.nav`
   display: flex;
   justify-content: center;
-
+  width: 400px;
+  margin: 0 auto;
+  justify-content: space-evenly;
+  font-size: 1.2em;
+  margin-bottom: 10px;
   a {
+    color: white;
     margin: 10px;
   }
 `;
@@ -30,36 +39,41 @@ const Navbar = styled.nav`
 class App extends Component {
   render() {
     const { primaryMoji } = this.props;
+    addBackToTop();
+
     return (
       <div className="App">
         <div className="App-header">
           <Router>
             <RouterContainer>
-              <Navbar>
-                {primaryMoji && <Link to="/solomoji">SoloMoji</Link>}
-                <Link to="/">Home</Link>
-                {primaryMoji && <Link to="/duomoji">DuoMoji</Link>}
-              </Navbar>
-              <div>
-                <Route path="/" exact component={Home} />
-                {primaryMoji && (
-                  <Route path="/solomoji" exact component={Mojis} />
-                )}
-
-                {primaryMoji && (
-                  <Route
-                    path="/duomoji"
-                    exact
-                    render={() => <Mojis isFriendMoji={true} />}
-                  />
-                )}
-              </div>
+              {primaryMoji && (
+                <Navbar>
+                  <Link to="/solomoji">SoloMoji</Link>
+                  <Link to="/">Home</Link>
+                  <Link to="/duomoji">DuoMoji</Link>
+                </Navbar>
+              )}
+              <Route
+                exact={primaryMoji ? true : false}
+                path="/"
+                component={Home}
+              />
+              {primaryMoji && (
+                <Route exact path="/solomoji" component={Mojis} />
+              )}
+              {primaryMoji && (
+                <Route
+                  path="/duomoji"
+                  exact
+                  render={() => <Mojis isFriendMoji={true} />}
+                />
+              )}
             </RouterContainer>
           </Router>
         </div>
         <ToastContainer
           position="bottom-center"
-          autoClose={3000}
+          autoClose={2000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick

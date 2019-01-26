@@ -6,6 +6,29 @@ import Modal from "../../components/Modal";
 
 import { toast } from "react-toastify";
 
+import { connect } from "react-redux";
+import { setPrimaryMoji, setSecondaryMoji } from "../../components/Modal/ducks";
+import { yaphmoji, travmoji } from "../../data/variables";
+
+import { Button } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+
+import styled from "styled-components/macro";
+
+const HomeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #282c34;
+`;
+
+const FormContainer = styled(Form)`
+  width: 90% !important;
+  max-width: 700px !important;
+`;
+
 class Home extends Component {
   state = {
     url: `https://render.bitstrips.com/v2/cpanel/1d94da02-6431-445d-83b1-193712b6f689-775991c0-e4ac-4b90-8bd2-6ac44e655e3f-v1.png?transparent=1&palette=1`,
@@ -27,13 +50,14 @@ class Home extends Component {
   };
 
   checkImageURL = (mojiURL, bitmojiID) => {
+    this.setState({ loading: true });
     const tester = new Image();
     tester.onload = () =>
       this.setState({
         mojiURL,
         bitmojiID,
         open: true,
-        loading: true
+        loading: false
       });
     tester.onerror = this.errorLoadingMoji;
     tester.src = mojiURL;
@@ -43,16 +67,23 @@ class Home extends Component {
     toast.error(`Bitmoji not found :(`);
     this.setState({ loading: false });
   };
+
   onCloseModal = () => {
     this.setState({ open: false, loading: false });
   };
 
+  skipSetup = () => {
+    this.props.setPrimaryMojiLocal(yaphmoji);
+    this.props.setSecondaryMojiLocal(travmoji);
+  };
+
   render() {
     const { url, open, mojiURL, bitmojiID, loading } = this.state;
+    const { primaryMoji } = this.props;
 
     return (
-      <div>
-        <Form onSubmit={this.handleSubmit}>
+      <HomeContainer>
+        <FormContainer onSubmit={this.handleSubmit}>
           <Form.TextArea
             placeholder="Bitmoji URL"
             name="url"
@@ -60,22 +91,43 @@ class Home extends Component {
             onChange={this.handleChange}
             autoHeight
             disabled={loading}
+            style={{ minHeight: 150 }}
           />
           <Form.Button
-            content="Find Moji"
+            content={primaryMoji ? "Reset Mojis" : "Find Moji"}
             disabled={url.trim().length > 0 || loading ? false : true}
             loading={loading}
           />
-        </Form>
+        </FormContainer>
         <Modal
           open={open}
           onCloseModal={this.onCloseModal}
           mojiURL={mojiURL}
-          primaryID={bitmojiID}
+          mojiID={bitmojiID}
         />
-      </div>
+        {!primaryMoji && (
+          <Button
+            as={Link}
+            to="/solomoji"
+            onClick={this.skipSetup}
+            content="Skip this step"
+          />
+        )}
+      </HomeContainer>
     );
   }
 }
 
-export default Home;
+const mapStateToProps = state => ({
+  primaryMoji: state.mojiModal.primaryMoji
+});
+
+const mapDispatchToProps = dispatch => ({
+  setPrimaryMojiLocal: mojiID => dispatch(setPrimaryMoji(mojiID)),
+  setSecondaryMojiLocal: mojiID => dispatch(setSecondaryMoji(mojiID))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home);
