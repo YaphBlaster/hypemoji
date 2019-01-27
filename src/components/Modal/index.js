@@ -8,7 +8,7 @@ import { Button } from "semantic-ui-react";
 
 // Redux
 import { connect } from "react-redux";
-import { setPrimaryMoji } from "./ducks";
+import { setPrimaryMoji, setSecondaryMoji } from "./ducks";
 
 import { Link } from "react-router-dom";
 
@@ -35,35 +35,59 @@ class Modal extends Component {
     this.setState({ open: true });
   };
 
+  selectPrimary = () => {
+    const { mojiID } = this.props;
+    this.props.setPrimaryMojiLocal(mojiID);
+    this.props.onCloseModal();
+  };
+
+  selectSecondary = () => {
+    const { mojiID } = this.props;
+    this.props.setSecondaryMojiLocal(mojiID);
+    this.props.onCloseModal();
+  };
+
   render() {
-    const { open, mojiURL, onCloseModal, primaryID } = this.props;
+    const { open, mojiURL, onCloseModal, mojiID, primaryMoji } = this.props;
 
     return (
       <ResponsiveModal
         open={open}
         onClose={onCloseModal}
-        center
         blockScroll
         styles={{
           modal: {
             borderRadius: "3%",
             display: "grid",
-            gridGap: "10px"
+            gridGap: "10px",
+            marginTop: "10%"
           }
         }}
       >
         <ModalImage src={mojiURL} alt="" />
-        <UserPrompt>Is this you?</UserPrompt>
-        <ButtonGroup>
-          <Button onClick={onCloseModal}>No</Button>
-          <Button
-            as={Link}
-            to="/solomoji"
-            onClick={() => this.props.setPrimaryMojiLocal(primaryID)}
-          >
-            Yes
-          </Button>
-        </ButtonGroup>
+        <UserPrompt>
+          {primaryMoji
+            ? "Is this bro/brah primary or secondary?"
+            : "Is this you?"}
+        </UserPrompt>
+
+        {primaryMoji ? (
+          <ButtonGroup>
+            <Button onClick={this.selectPrimary}>Primary</Button>
+            <Button onClick={this.selectSecondary}>Secondary</Button>
+          </ButtonGroup>
+        ) : (
+          <ButtonGroup>
+            <Button onClick={onCloseModal}>No</Button>
+            <Button
+              as={Link}
+              to="/solomoji"
+              onClick={() => this.props.setPrimaryMojiLocal(mojiID)}
+            >
+              Yes
+            </Button>
+          </ButtonGroup>
+        )}
       </ResponsiveModal>
     );
   }
@@ -74,7 +98,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setPrimaryMojiLocal: mojiID => dispatch(setPrimaryMoji(mojiID))
+  setPrimaryMojiLocal: mojiID => dispatch(setPrimaryMoji(mojiID)),
+  setSecondaryMojiLocal: mojiID => dispatch(setSecondaryMoji(mojiID))
 });
 
 export default connect(
