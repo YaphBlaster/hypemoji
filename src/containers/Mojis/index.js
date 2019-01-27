@@ -27,7 +27,7 @@ const ImageGrid = styled.div`
   margin: 0 auto;
   grid-gap: ${SPACING};
   width: 100%;
-  margin-top: ${SPACING};
+  margin-top: 20px;
   margin-bottom: ${SPACING};
   padding: 25px;
 `;
@@ -43,6 +43,7 @@ const LoaderContainer = styled(Loader)`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 100px;
 `;
 
 const PaginationContainer = styled(Pagination)`

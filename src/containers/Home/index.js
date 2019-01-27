@@ -15,18 +15,55 @@ import { Link } from "react-router-dom";
 
 import styled from "styled-components/macro";
 
+import logo from "../../assets/logo.jpg";
+
+import Loader from "react-loaders";
+
+const LOGO_WIDTH = "500px";
+
+const CONFETTI_CONFIG = {
+  angle: 0,
+  spread: 360,
+  startVelocity: 30,
+  elementCount: 50,
+  decay: 0.9
+};
 const HomeContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  height: 100vh;
   background-color: #282c34;
+  height: 100%;
+  a {
+    margin: 15px !important;
+  }
+`;
+
+const HypeMojiLogo = styled.img`
+  max-width: ${LOGO_WIDTH};
+  width: 80%;
+  border-radius: 15px;
+  border-top: 2px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.5);
+  align-self: center;
+  margin: 40px;
 `;
 
 const FormContainer = styled(Form)`
   width: 90% !important;
   max-width: 700px !important;
+`;
+
+const LoaderContainer = styled(Loader)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  width: 100%;
+  height: 100%;
+  max-width: ${LOGO_WIDTH};
+  margin-top: 10%;
 `;
 
 class Home extends Component {
@@ -77,35 +114,67 @@ class Home extends Component {
     this.props.setSecondaryMojiLocal(travmoji);
   };
 
+  logoPressed = () => {
+    this.setState({
+      confetti: true
+    });
+
+    setTimeout(() => {
+      this.setState({
+        confetti: false
+      });
+    }, 1000);
+  };
+
   render() {
-    const { url, open, mojiURL, bitmojiID, loading } = this.state;
+    const {
+      url,
+      open,
+      mojiURL,
+      bitmojiID,
+      loading,
+      logoLoaded,
+      confetti
+    } = this.state;
     const { primaryMoji } = this.props;
 
     return (
       <HomeContainer>
-        <FormContainer onSubmit={this.handleSubmit}>
-          <Form.TextArea
-            placeholder="Bitmoji URL"
-            name="url"
-            value={url}
-            onChange={this.handleChange}
-            autoHeight
-            disabled={loading}
-            style={{ minHeight: 150 }}
-          />
-          <Form.Button
-            content={primaryMoji ? "Reset Mojis" : "Find Moji"}
-            disabled={url.trim().length > 0 || loading ? false : true}
-            loading={loading}
-          />
-        </FormContainer>
+        {!logoLoaded && <LoaderContainer type="ball-triangle-path" active />}
+
+        <HypeMojiLogo
+          src={logo}
+          onLoad={() => this.setState({ logoLoaded: true })}
+          style={logoLoaded ? null : { display: "none" }}
+          onClick={this.logoPressed}
+        />
+
+        {logoLoaded && (
+          <FormContainer onSubmit={this.handleSubmit}>
+            <Form.TextArea
+              placeholder="Bitmoji URL"
+              name="url"
+              value={url}
+              onChange={this.handleChange}
+              autoHeight
+              disabled={loading}
+              style={{ minHeight: 150 }}
+            />
+            <Form.Button
+              content={primaryMoji ? "Reset Mojis" : "Find Moji"}
+              disabled={url.trim().length > 0 || loading ? false : true}
+              loading={loading}
+            />
+          </FormContainer>
+        )}
+
         <Modal
           open={open}
           onCloseModal={this.onCloseModal}
           mojiURL={mojiURL}
           mojiID={bitmojiID}
         />
-        {!primaryMoji && (
+        {!primaryMoji && logoLoaded && (
           <Button
             as={Link}
             to="/solomoji"

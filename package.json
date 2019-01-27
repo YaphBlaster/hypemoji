@@ -28,7 +28,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lt.surge": "react-scripts build && mv ./build/index.html ./build/200.html && surge --domain bitmojis.surge.sh ./build"
+    "lt.surge": "react-scripts build && mv ./build/index.html ./build/200.html && surge --domain hypemoji.surge.sh ./build"
   },
   "eslintConfig": {
     "extends": "react-app"

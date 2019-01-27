@@ -1208,11 +1208,6 @@ alphanum-sort@^1.0.0:
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
-animated-scroll-to@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/animated-scroll-to/-/animated-scroll-to-1.2.2.tgz#d6688e72f3ecec1a296fc2b36fe29290e7fff694"
-  integrity sha512-16ipIWWKvRGAeTfgiqTdXDBLPU0fCIq5sGDMQSdQnIjkxgm3pHzzUZiJ+rT/3xVbOXpTTN72vf2C4y9vepDBHA==
-
 ansi-colors@^3.0.0:
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/ansi-colors/-/ansi-colors-3.2.3.tgz#57d35b8686e851e2cc04c403f1c00203976a1813"
@@ -3056,11 +3051,6 @@ detect-libc@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
   integrity sha1-+hN8S9aY7fVc1c0CrFWfkaTEups=
-
-detect-mobile-browser@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/detect-mobile-browser/-/detect-mobile-browser-5.0.0.tgz#688c2594e941ce8b7298a6a2c642019e1a1a3af5"
-  integrity sha1-aIwllOlBzotymKaixkIBnhoaOvU=
 
 detect-newline@^2.1.0:
   version "2.1.0"

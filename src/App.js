@@ -18,18 +18,18 @@ import { addBackToTop } from "vanilla-back-to-top";
 
 const RouterContainer = styled.div`
   width: 80%;
-  padding-bottom: 100px;
-  padding-top: 20px;
 `;
 
 const Navbar = styled.nav`
   display: flex;
   justify-content: center;
-  width: 400px;
   margin: 0 auto;
   justify-content: space-evenly;
   font-size: 1.2em;
   margin-bottom: 10px;
+  margin-top: 10px;
+  max-width: 400px;
+  width: 100%;
   a {
     color: white;
     margin: 10px;

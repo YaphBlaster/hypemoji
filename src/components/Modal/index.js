@@ -54,13 +54,13 @@ class Modal extends Component {
       <ResponsiveModal
         open={open}
         onClose={onCloseModal}
-        center
         blockScroll
         styles={{
           modal: {
             borderRadius: "3%",
             display: "grid",
-            gridGap: "10px"
+            gridGap: "10px",
+            marginTop: "10%"
           }
         }}
       >
