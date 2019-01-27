@@ -5,11 +5,38 @@ import { connect } from "react-redux";
 
 import styled from "styled-components/macro";
 
-const Badge = styled(Label)`
-  position: absolute;
+import posed from "react-pose";
+
+import { isMobileDevice } from "../../data/variables";
+
+import { Link } from "react-router-dom";
+
+const PopAndHover = posed.div({
+  pressable: true,
+  hoverable: isMobileDevice() ? false : true,
+  init: { scale: 1 },
+  press: { scale: 1.1 },
+  hover: {
+    scale: 1.4
+  }
+});
+
+const Badge = styled(PopAndHover)`
+  position: absolute !important;
   align-self: flex-end;
-  margin-top: 10px !important;
+  margin-top: -5px !important;
   margin-left: 20px !important;
+`;
+
+const BadgeContent = styled.div`
+  display: flex;
+  @media screen and (min-width: 400px) {
+    div,
+    i {
+      font-size: 1.5em !important;
+    }
+  }
+  transition: 0.3s all;
 `;
 
 class ComicStripBadge extends Component {
@@ -23,9 +50,15 @@ class ComicStripBadge extends Component {
 
   render() {
     return (
-      <Badge color="red" circular size="medium">
-        <Icon name="film" />
-        {Object.keys(this.props.comicStrip).length}
+      <Badge>
+        <Label color="teal" size="medium" pointing as={Link} to="/comic-strip">
+          <BadgeContent>
+            <Icon name="film" />
+            <Label.Detail>
+              {Object.keys(this.props.comicStrip).length}
+            </Label.Detail>
+          </BadgeContent>
+        </Label>
       </Badge>
     );
   }

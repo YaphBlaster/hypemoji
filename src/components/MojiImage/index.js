@@ -63,7 +63,7 @@ class MojiImage extends Component {
     if (Object.keys(comicStrip).length >= 10) {
       toast.error("Comic Strip Full");
     } else {
-      const key = Math.floor(Math.random() * 1000000) + 1;
+      const key = Math.floor(Math.random() * 100000000) + 1;
       this.props.addToComicStripLocal(comicURL, comicID, key);
       toast.info("Added To Comic Strip!");
     }

@@ -17,6 +17,7 @@ export function reducer(state = initialState, action) {
       comicStrip[`${comicId}_${uniqueIdentifier}`] = {
         url: comicUrl,
         key: uniqueIdentifier,
+        comicId,
         text: ""
       };
       return {
