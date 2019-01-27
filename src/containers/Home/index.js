@@ -114,28 +114,8 @@ class Home extends Component {
     this.props.setSecondaryMojiLocal(travmoji);
   };
 
-  logoPressed = () => {
-    this.setState({
-      confetti: true
-    });
-
-    setTimeout(() => {
-      this.setState({
-        confetti: false
-      });
-    }, 1000);
-  };
-
   render() {
-    const {
-      url,
-      open,
-      mojiURL,
-      bitmojiID,
-      loading,
-      logoLoaded,
-      confetti
-    } = this.state;
+    const { url, open, mojiURL, bitmojiID, loading, logoLoaded } = this.state;
     const { primaryMoji } = this.props;
 
     return (

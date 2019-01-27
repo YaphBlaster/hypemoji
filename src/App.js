@@ -16,10 +16,20 @@ import styled from "styled-components/macro";
 
 import { addBackToTop } from "vanilla-back-to-top";
 
+import ComicStripBadge from "./components/ComicStripBadge";
+
 const RouterContainer = styled.div`
   width: 80%;
 `;
 
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  min-width: 265px;
+`;
 const Navbar = styled.nav`
   display: flex;
   justify-content: center;
@@ -28,11 +38,15 @@ const Navbar = styled.nav`
   font-size: 1.2em;
   margin-bottom: 10px;
   margin-top: 10px;
-  max-width: 400px;
-  width: 100%;
+
+  flex-direction: row;
   a {
     color: white;
     margin: 10px;
+    text-decoration: none;
+    :hover {
+      color: white;
+    }
   }
 `;
 
@@ -47,12 +61,17 @@ class App extends Component {
           <Router>
             <RouterContainer>
               {primaryMoji && (
-                <Navbar>
-                  <Link to="/solomoji">SoloMoji</Link>
-                  <Link to="/">Home</Link>
-                  <Link to="/duomoji">DuoMoji</Link>
-                </Navbar>
+                <Header>
+                  <Navbar>
+                    <Link to="/solomoji">SoloMoji</Link>
+                    <Link to="/">Home</Link>
+                    <Link to="/duomoji">DuoMoji</Link>
+                  </Navbar>
+                  <ComicStripBadge />
+                </Header>
               )}
+              {/* <ComicStripBadge /> */}
+
               <Route
                 exact={primaryMoji ? true : false}
                 path="/"

@@ -14,7 +14,7 @@ const persistConfig = {
   key: "root",
   storage,
   stateReconciler: autoMergeLevel2,
-  blacklist: ["mojiObjects"]
+  blacklist: ["mojiObjects", "comicStrip"]
 };
 
 const pReducer = persistReducer(persistConfig, reducer);

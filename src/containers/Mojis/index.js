@@ -99,7 +99,6 @@ class Mojis extends Component {
   }
 
   getTemplateMojis = async () => {
-    console.log("sup imma load this shit");
     const response = await axios.get(bitmojiApi);
     const { friends, imoji } = response.data;
 
@@ -211,14 +210,16 @@ class Mojis extends Component {
             {Object.values(mojis)
               .slice(start, start + 25)
               .map((moji, index) => {
-                let { src } = moji;
+                let { src, comic_id } = moji;
                 src = src.replace(/%s/, primaryMoji);
                 if (isFriendMoji && secondaryMoji) {
                   src = src.replace(/%s/, secondaryMoji);
                 } else if (isFriendMoji && !secondaryMoji) {
                   src = src.replace(/%s/, primaryMoji);
                 }
-                return <MojiImage source={src} key={index} />;
+                return (
+                  <MojiImage source={src} key={index} comicID={comic_id} />
+                );
               })}
           </ImageGrid>
           {!imagesLoaded && <LoaderContainer type="pacman" active />}
