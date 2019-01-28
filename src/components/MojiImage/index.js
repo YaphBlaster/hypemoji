@@ -47,6 +47,7 @@ const AddButton = styled(Icon)`
   align-self: flex-end;
   margin-top: 10px !important;
   margin-left: -10px !important;
+  display: none;
 `;
 
 class MojiImage extends Component {
@@ -93,6 +94,7 @@ class MojiImage extends Component {
           circular
           onClick={() => this.addToList(editedURL, comicID)}
           size="large"
+          style={loaded && { display: "block" }}
         />
       </PopBoxStyled>
     );
