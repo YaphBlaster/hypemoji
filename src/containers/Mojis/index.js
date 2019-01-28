@@ -22,8 +22,8 @@ import OnImagesLoaded from "react-on-images-loaded";
 const SPACING = "40px";
 const ImageGrid = styled.div`
   display: grid;
-  max-width: 1000px;
-  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+  max-width: 865px;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
   margin: 0 auto;
   grid-gap: ${SPACING};
   width: 100%;
@@ -185,7 +185,12 @@ class Mojis extends Component {
     return loadedMojis && mojis ? (
       <Container>
         {secondaryMoji && imagesLoaded && (
-          <SwitchButton content="switch" onClick={this.switchMojis} />
+          <SwitchButton
+            basic
+            color="teal"
+            content="switch"
+            onClick={this.switchMojis}
+          />
         )}
 
         {imagesLoaded && (
@@ -193,7 +198,7 @@ class Mojis extends Component {
             onChange={this.searchMojis}
             name="searchTerm"
             value={searchTerm}
-            label={<Button icon="x" onClick={this.clear} />}
+            label={<Button icon="x" color="teal" onClick={this.clear} />}
             labelPosition="right"
           />
         )}
