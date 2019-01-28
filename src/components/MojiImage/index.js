@@ -13,7 +13,7 @@ import { isMobileDevice } from "../../data/variables";
 import { Icon } from "semantic-ui-react";
 
 import { connect } from "react-redux";
-import { addToComicStrip } from "./ducks";
+import { addToComicStrip } from "../ComicStripBadge/ducks";
 
 const Image = styled.img`
   width: 100%;
@@ -47,6 +47,7 @@ const AddButton = styled(Icon)`
   align-self: flex-end;
   margin-top: 10px !important;
   margin-left: -10px !important;
+  display: none;
 `;
 
 class MojiImage extends Component {
@@ -58,12 +59,11 @@ class MojiImage extends Component {
 
   addToList = (comicURL, comicID) => {
     const { comicStrip } = this.props;
-    console.log(Object.keys(comicStrip).length);
 
-    if (Object.keys(comicStrip).length >= 10) {
+    if (comicStrip.length >= 10) {
       toast.error("Comic Strip Full");
     } else {
-      const key = Math.floor(Math.random() * 1000000) + 1;
+      const key = Math.floor(Math.random() * 100000000) + 1;
       this.props.addToComicStripLocal(comicURL, comicID, key);
       toast.info("Added To Comic Strip!");
     }
@@ -94,6 +94,7 @@ class MojiImage extends Component {
           circular
           onClick={() => this.addToList(editedURL, comicID)}
           size="large"
+          style={loaded && { display: "block" }}
         />
       </PopBoxStyled>
     );

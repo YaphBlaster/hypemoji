@@ -3,6 +3,7 @@ import "./App.css";
 
 import Home from "./containers/Home";
 import Mojis from "./containers/Mojis";
+import ComicStrip from "./containers/ComicStrip";
 
 // Toasts
 import { ToastContainer } from "react-toastify";
@@ -18,6 +19,10 @@ import { addBackToTop } from "vanilla-back-to-top";
 
 import ComicStripBadge from "./components/ComicStripBadge";
 
+import posed from "react-pose";
+
+import { isMobileDevice } from "./data/variables";
+
 const RouterContainer = styled.div`
   width: 80%;
 `;
@@ -30,6 +35,12 @@ const Header = styled.div`
   margin: 0 auto;
   min-width: 265px;
 `;
+
+const Content = styled.div`
+  margin-top: 40px;
+  margin-bottom: 100px;
+`;
+
 const Navbar = styled.nav`
   display: flex;
   justify-content: center;
@@ -50,6 +61,16 @@ const Navbar = styled.nav`
   }
 `;
 
+const PopAndHover = posed.div({
+  pressable: true,
+  hoverable: isMobileDevice() ? false : true,
+  init: { scale: 1 },
+  press: { scale: 1.1 },
+  hover: {
+    scale: 1.2
+  }
+});
+
 class App extends Component {
   render() {
     const { primaryMoji } = this.props;
@@ -63,30 +84,41 @@ class App extends Component {
               {primaryMoji && (
                 <Header>
                   <Navbar>
-                    <Link to="/solomoji">SoloMoji</Link>
-                    <Link to="/">Home</Link>
-                    <Link to="/duomoji">DuoMoji</Link>
+                    <PopAndHover>
+                      <Link to="/solomoji">SoloMoji</Link>
+                    </PopAndHover>
+                    <PopAndHover>
+                      <Link to="/">Home</Link>
+                    </PopAndHover>
+                    <PopAndHover>
+                      <Link to="/duomoji">DuoMoji</Link>
+                    </PopAndHover>
                   </Navbar>
                   <ComicStripBadge />
                 </Header>
               )}
               {/* <ComicStripBadge /> */}
 
-              <Route
-                exact={primaryMoji ? true : false}
-                path="/"
-                component={Home}
-              />
-              {primaryMoji && (
-                <Route exact path="/solomoji" component={Mojis} />
-              )}
-              {primaryMoji && (
+              <Content>
                 <Route
-                  path="/duomoji"
-                  exact
-                  render={() => <Mojis isFriendMoji={true} />}
+                  exact={primaryMoji ? true : false}
+                  path="/"
+                  component={Home}
                 />
-              )}
+                {primaryMoji && (
+                  <Route exact path="/solomoji" component={Mojis} />
+                )}
+                {primaryMoji && (
+                  <Route
+                    path="/duomoji"
+                    exact
+                    render={() => <Mojis isFriendMoji={true} />}
+                  />
+                )}
+                {primaryMoji && (
+                  <Route path="/comic-strip" exact component={ComicStrip} />
+                )}
+              </Content>
             </RouterContainer>
           </Router>
         </div>

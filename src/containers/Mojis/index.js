@@ -43,7 +43,6 @@ const LoaderContainer = styled(Loader)`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 100px;
 `;
 
 const PaginationContainer = styled(Pagination)`
@@ -79,15 +78,12 @@ class Mojis extends Component {
     const { soloMojis, duoMojis, isFriendMoji } = this.props;
 
     if (soloMojis && duoMojis && isFriendMoji) {
-      console.log("found old friends");
       this.setState({
         mojis: duoMojis,
         originalMojis: duoMojis,
         loadedMojis: true
       });
     } else if (soloMojis && duoMojis) {
-      console.log("found yourself");
-
       this.setState({
         mojis: soloMojis,
         originalMojis: soloMojis,
