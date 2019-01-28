@@ -21,13 +21,6 @@ import Loader from "react-loaders";
 
 const LOGO_WIDTH = "500px";
 
-const CONFETTI_CONFIG = {
-  angle: 0,
-  spread: 360,
-  startVelocity: 30,
-  elementCount: 50,
-  decay: 0.9
-};
 const HomeContainer = styled.div`
   display: flex;
   align-items: center;
@@ -68,7 +61,7 @@ const LoaderContainer = styled(Loader)`
 
 class Home extends Component {
   state = {
-    url: `https://render.bitstrips.com/v2/cpanel/1d94da02-6431-445d-83b1-193712b6f689-775991c0-e4ac-4b90-8bd2-6ac44e655e3f-v1.png?transparent=1&palette=1`,
+    url: ``,
     open: false
   };
 
