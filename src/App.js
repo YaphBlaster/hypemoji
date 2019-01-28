@@ -38,7 +38,9 @@ const Header = styled.div`
 
 const Content = styled.div`
   margin-top: 40px;
+  margin-bottom: 100px;
 `;
+
 const Navbar = styled.nav`
   display: flex;
   justify-content: center;

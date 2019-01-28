@@ -13,7 +13,7 @@ import { isMobileDevice } from "../../data/variables";
 import { Icon } from "semantic-ui-react";
 
 import { connect } from "react-redux";
-import { addToComicStrip } from "./ducks";
+import { addToComicStrip } from "../ComicStripBadge/ducks";
 
 const Image = styled.img`
   width: 100%;
@@ -58,9 +58,8 @@ class MojiImage extends Component {
 
   addToList = (comicURL, comicID) => {
     const { comicStrip } = this.props;
-    console.log(Object.keys(comicStrip).length);
 
-    if (Object.keys(comicStrip).length >= 10) {
+    if (comicStrip.length >= 10) {
       toast.error("Comic Strip Full");
     } else {
       const key = Math.floor(Math.random() * 100000000) + 1;

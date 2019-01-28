@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Icon, Label, Menu } from "semantic-ui-react";
+import { Icon, Label } from "semantic-ui-react";
 
 import { connect } from "react-redux";
 
@@ -42,21 +42,14 @@ const BadgeContent = styled.div`
 class ComicStripBadge extends Component {
   state = {};
 
-  componentDidMount() {
-    setInterval(() => {
-      this.forceUpdate();
-    }, 500);
-  }
-
   render() {
+    const { stripLength } = this.props;
     return (
       <Badge>
         <Label color="teal" size="medium" pointing as={Link} to="/comic-strip">
           <BadgeContent>
             <Icon name="film" />
-            <Label.Detail>
-              {Object.keys(this.props.comicStrip).length}
-            </Label.Detail>
+            <Label.Detail>{stripLength}</Label.Detail>
           </BadgeContent>
         </Label>
       </Badge>
@@ -65,7 +58,8 @@ class ComicStripBadge extends Component {
 }
 
 const mapStateToProps = state => ({
-  comicStrip: state.comicStrip.comicStrip
+  comicStrip: state.comicStrip.comicStrip,
+  stripLength: state.comicStrip.stripLength
 });
 
 export default connect(
