@@ -85,7 +85,7 @@ class MojiImage extends Component {
           <Image
             src={source}
             onLoad={this.imageLoaded}
-            style={loaded && { display: "block" }}
+            style={loaded ? { display: "block" } : null}
           />
         </CopyToClipboard>
         <AddButton
@@ -94,7 +94,7 @@ class MojiImage extends Component {
           circular
           onClick={() => this.addToList(editedURL, comicID)}
           size="large"
-          style={loaded && { display: "block" }}
+          style={loaded ? { display: "block " } : null}
         />
       </PopBoxStyled>
     );

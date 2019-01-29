@@ -28,13 +28,27 @@ export function reducer(state = initialState, action) {
       };
     }
     case REMOVE_FROM_COMIC_STRIP: {
+      const { uniqueIdentifier } = action;
+      const { comicStrip } = state;
+      let foundIndex = 0;
+      let newComicStrip = [];
+      for (let index = 0; index < comicStrip.length; index++) {
+        if (uniqueIdentifier !== comicStrip[index].uniqueIdentifier) {
+          newComicStrip.push(comicStrip[index]);
+        }
+      }
+
+      console.log(newComicStrip);
       return {
-        ...state
+        ...state,
+        comicStrip: newComicStrip,
+        stripLength: newComicStrip.length
       };
     }
     case MOVE_COMIC_PANEL: {
       const { comicStrip } = state;
       const { oldIndex, newIndex } = action;
+      if (oldIndex === newIndex) return state;
       return {
         ...state,
         comicStrip: arrayMove(comicStrip, oldIndex, newIndex)
@@ -62,11 +76,9 @@ export function addToComicStrip(url, comicId, uniqueIdentifier) {
   };
 }
 
-export function removeFromComicStrip(url, comicId, uniqueIdentifier) {
+export function removeFromComicStrip(uniqueIdentifier) {
   return {
     type: REMOVE_FROM_COMIC_STRIP,
-    url,
-    comicId,
     uniqueIdentifier
   };
 }

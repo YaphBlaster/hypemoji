@@ -20,14 +20,25 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import { toast } from "react-toastify";
 
-const SortableItem = SortableElement(({ value }) => <StripImage src={value} />);
+import StripItem from "../../components/StripItem";
+
+const SortableItem = SortableElement(({ value, id }) => (
+  <StripItem url={value} id={id} />
+));
 
 const SortableList = SortableContainer(({ items }) => {
   return (
     <div>
       {items.map((value, index) => {
         const { comicID, url, uniqueIdentifier } = value;
-        return <SortableItem key={`item-${index}`} index={index} value={url} />;
+        return (
+          <SortableItem
+            key={`item-${index}`}
+            index={index}
+            value={url}
+            id={uniqueIdentifier}
+          />
+        );
       })}
     </div>
   );
@@ -44,9 +55,6 @@ const Strip = styled.div`
   align-items: center;
   width: 90%;
   max-width: 400px;
-  /* .div {
-    width: 10% !important;
-  } */
 `;
 
 const StripImage = styled.img`
@@ -116,6 +124,7 @@ class ComicStrip extends Component {
   };
 
   onSortEnd = ({ oldIndex, newIndex }) => {
+    if (oldIndex === newIndex) return;
     const { moveComicPanelLocal } = this.props;
 
     moveComicPanelLocal(oldIndex, newIndex);
@@ -131,12 +140,12 @@ class ComicStrip extends Component {
     return (
       <div>
         <div>
-          {!hasComicStrips &&
+          {comicStrip.length <= 0 &&
             !processedComicURL &&
             "Nothing here yet, add some comic panels!"}
         </div>
         <ComicStripList>
-          {hasComicStrips && !processedComicURL && (
+          {comicStrip.length > 0 && !processedComicURL && (
             <Strip>
               <StyledSortableContainer
                 items={comicStrip}
@@ -152,7 +161,7 @@ class ComicStrip extends Component {
           )}
         </ComicStripList>
 
-        {hasComicStrips && !processedComicURL && (
+        {comicStrip.length > 0 && !processedComicURL && (
           <ButtonsContainer>
             <Button
               onClick={this.clear}
