@@ -22,21 +22,22 @@ import { toast } from "react-toastify";
 
 import StripItem from "../../components/StripItem";
 
-const SortableItem = SortableElement(({ value, id }) => (
-  <StripItem url={value} id={id} />
+const SortableItem = SortableElement(({ value, id, text }) => (
+  <StripItem url={value} id={id} text={text} />
 ));
 
 const SortableList = SortableContainer(({ items }) => {
   return (
     <div>
       {items.map((value, index) => {
-        const { comicID, url, uniqueIdentifier } = value;
+        const { url, uniqueIdentifier, text } = value;
         return (
           <SortableItem
             key={`item-${index}`}
             index={index}
             value={url}
             id={uniqueIdentifier}
+            text={text}
           />
         );
       })}
@@ -88,21 +89,11 @@ class ComicStrip extends Component {
     creatingComic: false
   };
 
-  componentDidMount() {
-    const { comicStrip } = this.props;
-    const numberOfComics = comicStrip.length;
-    if (numberOfComics) {
-      this.setState({
-        hasComicStrips: true
-      });
-    }
-  }
-
   createComic = async () => {
     this.setState({
       creatingComic: true
     });
-    const { comicStrip, clearComicStripLocal } = this.props;
+    const { comicStrip } = this.props;
     const response = await axios.post(createComicAPI, comicStrip);
     const processedComicURL = response.data.body;
 
@@ -118,16 +109,12 @@ class ComicStrip extends Component {
   clear = () => {
     const { clearComicStripLocal } = this.props;
     clearComicStripLocal();
-    this.setState({
-      hasComicStrips: false
-    });
   };
 
   onSortEnd = ({ oldIndex, newIndex }) => {
     if (oldIndex === newIndex) return;
-    const { moveComicPanelLocal } = this.props;
 
-    moveComicPanelLocal(oldIndex, newIndex);
+    this.props.moveComicPanelLocal(oldIndex, newIndex);
   };
 
   copyLink = () => {
@@ -136,7 +123,7 @@ class ComicStrip extends Component {
 
   render() {
     const { comicStrip } = this.props;
-    const { hasComicStrips, creatingComic, processedComicURL } = this.state;
+    const { creatingComic, processedComicURL } = this.state;
     return (
       <div>
         <div>
