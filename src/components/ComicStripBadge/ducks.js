@@ -6,10 +6,12 @@ const REMOVE_FROM_COMIC_STRIP = "REMOVE_FROM_COMIC_STRIP";
 const MOVE_COMIC_PANEL = "MOVE_COMIC_PANEL";
 const CLEAR_COMIC_STRIP = "CLEAR_COMIC_STRIP";
 const UPDATE_COMIC_TEXT = "UPDATE_COMIC_TEXT";
+const PROCESS_COMIC_STRIP = "PROCESS_COMIC_STRIP";
 
 const initialState = {
   comicStrip: [],
-  stripLength: 0
+  stripLength: 0,
+  processingComicStrip: false
 };
 
 // Reducer input === current state
@@ -82,6 +84,12 @@ export function reducer(state = initialState, action) {
         ...state
       };
     }
+    case PROCESS_COMIC_STRIP: {
+      return {
+        ...state,
+        processingComicStrip: action.isProcessing
+      };
+    }
     default:
       return state;
   }
@@ -123,5 +131,12 @@ export function updateComicText(uniqueIdentifier, text) {
     type: UPDATE_COMIC_TEXT,
     uniqueIdentifier,
     text
+  };
+}
+
+export function setProcessingComicStrip(isProcessing) {
+  return {
+    type: PROCESS_COMIC_STRIP,
+    isProcessing
   };
 }

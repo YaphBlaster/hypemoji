@@ -9,7 +9,8 @@ import { createComicAPI } from "../../data/variables";
 
 import {
   moveComicPanel,
-  clearComicStrip
+  clearComicStrip,
+  setProcessingComicStrip
 } from "../../components/ComicStripBadge/ducks";
 
 import styled from "styled-components/macro";
@@ -85,22 +86,19 @@ const ButtonsContainer = styled.div`
 `;
 
 class ComicStrip extends Component {
-  state = {
-    creatingComic: false
-  };
+  state = {};
 
   createComic = async () => {
-    this.setState({
-      creatingComic: true
-    });
+    this.props.setProcessingComicStripLocal(true);
     const { comicStrip } = this.props;
     const response = await axios.post(createComicAPI, comicStrip);
     const processedComicURL = response.data.body;
 
     this.setState({
-      processedComicURL,
-      creatingComic: false
+      processedComicURL
     });
+
+    this.props.setProcessingComicStripLocal(false);
 
     toast.info("Created Comic Strip!");
     this.clear();
@@ -122,8 +120,8 @@ class ComicStrip extends Component {
   };
 
   render() {
-    const { comicStrip } = this.props;
-    const { creatingComic, processedComicURL } = this.state;
+    const { comicStrip, processingComicStrip } = this.props;
+    const { processedComicURL } = this.state;
     return (
       <div>
         <div>
@@ -152,14 +150,14 @@ class ComicStrip extends Component {
           <ButtonsContainer>
             <Button
               onClick={this.clear}
-              disabled={creatingComic}
+              disabled={processingComicStrip}
               content="Clear Comic Strip"
               secondary
             />
             <Button
               onClick={this.createComic}
-              loading={creatingComic}
-              disabled={creatingComic}
+              loading={processingComicStrip}
+              disabled={processingComicStrip}
               content="Create Comic Strip"
               secondary
             />
@@ -176,13 +174,16 @@ class ComicStrip extends Component {
 }
 
 const mapStateToProps = state => ({
-  comicStrip: state.comicStrip.comicStrip
+  comicStrip: state.comicStrip.comicStrip,
+  processingComicStrip: state.comicStrip.processingComicStrip
 });
 
 const mapDispatchToProps = dispatch => ({
   moveComicPanelLocal: (oldIndex, newIndex) =>
     dispatch(moveComicPanel(oldIndex, newIndex)),
-  clearComicStripLocal: () => dispatch(clearComicStrip())
+  clearComicStripLocal: () => dispatch(clearComicStrip()),
+  setProcessingComicStripLocal: isProcessing =>
+    dispatch(setProcessingComicStrip(isProcessing))
 });
 
 export default connect(

@@ -103,7 +103,7 @@ class StripItem extends Component {
   };
 
   render() {
-    const { url, id } = this.props;
+    const { url, id, processingComicStrip } = this.props;
     const { loaded } = this.state;
     return (
       <StripContainer>
@@ -127,6 +127,7 @@ class StripItem extends Component {
           onChange={this.handleChange}
           name="inputtedText"
           value={this.getTextValue()}
+          disabled={processingComicStrip}
           placeholder="Comic Text"
           ref={input => {
             this.bottomTextInput = input;
@@ -141,7 +142,8 @@ class StripItem extends Component {
 }
 
 const mapStateToProps = state => ({
-  comicStrip: state.comicStrip.comicStrip
+  comicStrip: state.comicStrip.comicStrip,
+  processingComicStrip: state.comicStrip.processingComicStrip
 });
 
 const mapDispatchToProps = dispatch => ({
