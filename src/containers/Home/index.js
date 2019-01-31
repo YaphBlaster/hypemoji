@@ -28,11 +28,12 @@ const HomeContainer = styled.div`
   flex-direction: column;
   background-color: #282c34;
   height: 100%;
-  a {
+  > a {
     margin: 15px !important;
   }
 `;
 
+const SkipButton = styled(Button)``;
 const HypeMojiLogo = styled.img`
   max-width: ${LOGO_WIDTH};
   width: 80%;
@@ -57,6 +58,10 @@ const LoaderContainer = styled(Loader)`
   height: 100%;
   max-width: ${LOGO_WIDTH};
   margin-top: 10%;
+`;
+
+const StepsList = styled.ul`
+  text-align: left;
 `;
 
 class Home extends Component {
@@ -121,6 +126,28 @@ class Home extends Component {
           style={logoLoaded ? null : { display: "none" }}
           onClick={this.logoPressed}
         />
+
+        {logoLoaded && (
+          <div>
+            <h2>How To Get Your Bitmoji URL (For Desktop)</h2>
+            <StepsList>
+              <li>
+                Download and install the{" "}
+                <a href="https://chrome.google.com/webstore/detail/bitmoji/bfgdeiadkckfbkeigkoncpdieiiefpig?hl=en">
+                  Bitmoji Chrome Extension
+                </a>
+              </li>
+              <li>Login with your Snapchat or Bitmoji Account</li>
+              <li>Open the Bitmoji Chrome Extension</li>
+              <li>
+                Right click on any Bitmoji thumbnail and select copy image
+                address OR open image in new tab
+              </li>
+              <li>Copy and paste the URL in the box below</li>
+              <li>Click on {primaryMoji ? "Reset Mojis" : "Find Moji"}!</li>
+            </StepsList>
+          </div>
+        )}
 
         {logoLoaded && (
           <FormContainer onSubmit={this.handleSubmit}>
