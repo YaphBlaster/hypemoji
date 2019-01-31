@@ -33,7 +33,6 @@ const HomeContainer = styled.div`
   }
 `;
 
-const SkipButton = styled(Button)``;
 const HypeMojiLogo = styled.img`
   max-width: ${LOGO_WIDTH};
   width: 80%;
