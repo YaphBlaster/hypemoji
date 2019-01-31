@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { bitmojiApi } from "../../data/variables";
+import { getMojisApi } from "../../data/variables";
 
 import axios from "axios";
 
@@ -12,7 +12,7 @@ import { setMojiObjects } from "./ducks";
 
 import styled from "styled-components/macro";
 
-import { Pagination, Icon, Button, Input, Form } from "semantic-ui-react";
+import { Pagination, Icon, Button, Input } from "semantic-ui-react";
 
 // Bitmoji Image
 import MojiImage from "../../components/MojiImage";
@@ -95,8 +95,8 @@ class Mojis extends Component {
   }
 
   getTemplateMojis = async () => {
-    const response = await axios.get(bitmojiApi);
-    const { friends, imoji } = response.data;
+    const response = await axios.get(getMojisApi);
+    const { friends, imoji } = response.data.body;
 
     const { isFriendMoji } = this.props;
 

@@ -8,8 +8,6 @@ import { toast } from "react-toastify";
 
 import posed from "react-pose";
 
-import { isMobileDevice } from "../../data/variables";
-
 import { Icon } from "semantic-ui-react";
 
 import { connect } from "react-redux";
@@ -34,12 +32,6 @@ const PopBoxStyled = styled(PopBox)`
   align-items: center;
   flex-direction: column;
 `;
-
-const HoverBox = posed.div({
-  hoverable: isMobileDevice() ? false : true,
-  init: { scale: 1 },
-  hover: { scale: 0.95 }
-});
 
 const AddButton = styled(Icon)`
   position: absolute;
@@ -85,7 +77,7 @@ class MojiImage extends Component {
           <Image
             src={source}
             onLoad={this.imageLoaded}
-            style={loaded && { display: "block" }}
+            style={loaded ? { display: "block" } : null}
           />
         </CopyToClipboard>
         <AddButton
@@ -94,7 +86,7 @@ class MojiImage extends Component {
           circular
           onClick={() => this.addToList(editedURL, comicID)}
           size="large"
-          style={loaded && { display: "block" }}
+          style={loaded ? { display: "block " } : null}
         />
       </PopBoxStyled>
     );
