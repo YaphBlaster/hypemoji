@@ -36,7 +36,7 @@ const StripContainer = styled.div`
   width: 80%;
   margin: 0 auto;
   img {
-    margin: -23px;
+    margin: -15px;
   }
 
   button > * {

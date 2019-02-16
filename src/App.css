@@ -4,6 +4,11 @@
   overflow: hidden;
 }
 
+body,
+html {
+  overflow: visible !important;
+}
+
 @font-face {
   font-family: "CustomFont";
   src: local("CustomFont"), url(./Hack-BoldOblique.ttf) format("truetype");
