@@ -114,6 +114,7 @@ class StripItem extends Component {
           color="black"
           icon="trash"
           size="large"
+          disabled={processingComicStrip}
         />
         <StripImage
           src={url}
@@ -136,7 +137,14 @@ class StripItem extends Component {
           style={!loaded ? { display: "none" } : null}
           className="custom-font"
         />
-        <MoveButton name="move" size="large" circular color="black" inverted />
+        <MoveButton
+          name="move"
+          size="large"
+          circular
+          color="black"
+          inverted
+          disabled={processingComicStrip}
+        />
       </StripContainer>
     );
   }
