@@ -129,6 +129,7 @@ class StripItem extends Component {
           value={this.getTextValue()}
           disabled={processingComicStrip}
           placeholder="Comic Text"
+          autocomplete="off"
           ref={input => {
             this.bottomTextInput = input;
           }}
