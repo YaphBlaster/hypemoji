@@ -36,7 +36,7 @@ const StripContainer = styled.div`
   width: 80%;
   margin: 0 auto;
   img {
-    margin: -23px;
+    margin: -15px;
   }
 
   button > * {
@@ -65,7 +65,7 @@ const ComicText = styled(Input)`
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
       1px 1px 0 #000;
     text-transform: uppercase;
-    font-size: 1.4em;
+    font-size: 0.9em;
   }
 `;
 
@@ -123,7 +123,7 @@ class StripItem extends Component {
         />
         <ComicText
           id={id}
-          maxLength={18}
+          maxLength={29}
           onChange={this.handleChange}
           name="inputtedText"
           value={this.getTextValue()}

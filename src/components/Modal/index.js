@@ -60,7 +60,8 @@ class Modal extends Component {
             borderRadius: "3%",
             display: "grid",
             gridGap: "10px",
-            marginTop: "10%"
+            marginTop: "10%",
+            overflow: "hidden"
           }
         }}
       >
