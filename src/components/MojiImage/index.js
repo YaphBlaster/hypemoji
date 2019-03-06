@@ -33,7 +33,7 @@ const PopBoxStyled = styled(PopBox)`
   flex-direction: column;
 `;
 
-const AddButton = styled(Icon)`
+export const AddButton = styled(Icon)`
   position: absolute;
   opacity: 0.7 !important;
   align-self: flex-end;

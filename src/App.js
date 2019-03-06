@@ -49,8 +49,8 @@ const Navbar = styled.nav`
   font-size: 1.2em;
   margin-bottom: 10px;
   margin-top: 10px;
-
   flex-direction: row;
+
   a {
     color: white;
     margin: 10px;
