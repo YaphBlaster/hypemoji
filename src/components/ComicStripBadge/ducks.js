@@ -8,7 +8,7 @@ const CLEAR_COMIC_STRIP = "CLEAR_COMIC_STRIP";
 const UPDATE_COMIC_TEXT = "UPDATE_COMIC_TEXT";
 const PROCESS_COMIC_STRIP = "PROCESS_COMIC_STRIP";
 
-const initialState = {
+export const initialState = {
   comicStrip: [],
   stripLength: 0,
   processingComicStrip: false
