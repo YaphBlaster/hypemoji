@@ -35,7 +35,7 @@ const HomeContainer = styled.div`
 
 const HypeMojiLogo = styled.img`
   max-width: ${LOGO_WIDTH};
-  width: 80%;
+  width: 25%;
   border-radius: 15px;
   border-top: 2px solid rgba(0, 0, 0, 0.3);
   box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.5);
