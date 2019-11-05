@@ -1,25 +1,27 @@
-import React, { Component } from "react";
+import React, { useState } from 'react';
 
-import { Form } from "semantic-ui-react";
+import { Form } from 'semantic-ui-react';
 
-import Modal from "../../components/Modal";
+import Modal from '../../components/Modal';
 
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
-import { connect } from "react-redux";
-import { setPrimaryMoji, setSecondaryMoji } from "../../components/Modal/ducks";
-import { yaphmoji, travmoji } from "../../data/variables";
+import { useSelector } from 'react-redux';
 
-import { Button } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { primaryMojiSelector } from '../../components/Modal/ducks';
+import { yaphmoji, travmoji } from '../../data/variables';
 
-import styled from "styled-components/macro";
+import { Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
-import logo from "../../assets/logo.jpg";
+import styled from 'styled-components/macro';
 
-import Loader from "react-loaders";
+import logo from '../../assets/logo.jpg';
 
-const LOGO_WIDTH = "500px";
+import Loader from 'react-loaders';
+import { useSetPrimaryMoji, useSetSecondaryMoji } from './hooks';
+
+const LOGO_WIDTH = '500px';
 
 const HomeContainer = styled.div`
   display: flex;
@@ -63,139 +65,126 @@ const StepsList = styled.ul`
   text-align: left;
 `;
 
-class Home extends Component {
-  state = {
-    url: ``,
-    open: false
-  };
+const Home = () => {
+  const [url, setUrl] = useState('');
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [mojiURL, setMojiURL] = useState('');
+  const [bitmojiID, setBitmojiID] = useState('');
+  const [logoLoaded, setLogoLoaded] = useState(false);
+  const setPrimaryMoji = useSetPrimaryMoji();
+  const setSecondaryMoji = useSetSecondaryMoji();
+  const primaryMoji = useSelector(primaryMojiSelector);
 
-  handleChange = (e, { name, value }) => this.setState({ [name]: value });
+  const handleChange = (e, { name, value }) => setUrl(value);
 
-  handleSubmit = () => {
-    this.setState({ loading: true });
-    const { url } = this.state;
+  const handleSubmit = () => {
+    setLoading(true);
     const bitmojiID = url
-      .split("-")
+      .split('-')
       .slice(5, 10)
-      .join("-");
+      .join('-');
     const templateURL = `https://render.bitstrips.com/v2/cpanel/0343a55f-9c3d-4cae-b54f-483cd99a2223-${bitmojiID}-v1.png?transparent=1&palette=1`;
 
-    this.checkImageURL(templateURL, bitmojiID);
+    checkImageURL(templateURL, bitmojiID);
   };
 
-  checkImageURL = (mojiURL, bitmojiID) => {
-    this.setState({ loading: true });
+  const checkImageURL = (mojiURL, bitmojiID) => {
+    setLoading(true);
     const tester = new Image();
-    tester.onload = () =>
-      this.setState({
-        mojiURL,
-        bitmojiID,
-        open: true,
-        loading: false
-      });
-    tester.onerror = this.errorLoadingMoji;
+    tester.onload = () => {
+      setMojiURL(mojiURL);
+      setBitmojiID(bitmojiID);
+      setOpen(true);
+      setLoading(true);
+    };
+
+    tester.onerror = errorLoadingMoji;
     tester.src = mojiURL;
   };
 
-  errorLoadingMoji = () => {
+  const errorLoadingMoji = () => {
     toast.error(`Bitmoji not found :(`);
-    this.setState({ loading: false });
+    setLoading(false);
   };
 
-  onCloseModal = () => {
-    this.setState({ open: false, loading: false });
+  const onCloseModal = () => {
+    setOpen(false);
+    setLoading(false);
   };
 
-  skipSetup = () => {
-    this.props.setPrimaryMojiLocal(yaphmoji);
-    this.props.setSecondaryMojiLocal(travmoji);
+  const skipSetup = () => {
+    setPrimaryMoji(yaphmoji);
+    setSecondaryMoji(travmoji);
   };
 
-  render() {
-    const { url, open, mojiURL, bitmojiID, loading, logoLoaded } = this.state;
-    const { primaryMoji } = this.props;
+  return (
+    <HomeContainer>
+      {!logoLoaded && <LoaderContainer type='ball-triangle-path' active />}
 
-    return (
-      <HomeContainer>
-        {!logoLoaded && <LoaderContainer type="ball-triangle-path" active />}
+      <HypeMojiLogo
+        src={logo}
+        onLoad={() => setLogoLoaded(true)}
+        style={logoLoaded ? null : { display: 'none' }}
+      />
 
-        <HypeMojiLogo
-          src={logo}
-          onLoad={() => this.setState({ logoLoaded: true })}
-          style={logoLoaded ? null : { display: "none" }}
-          onClick={this.logoPressed}
-        />
+      {logoLoaded && (
+        <div>
+          <h2>How To Get Your Bitmoji URL (For Desktop)</h2>
+          <StepsList>
+            <li>
+              Download and install the{' '}
+              <a href='https://chrome.google.com/webstore/detail/bitmoji/bfgdeiadkckfbkeigkoncpdieiiefpig?hl=en'>
+                Bitmoji Chrome Extension
+              </a>
+            </li>
+            <li>Login with your Snapchat or Bitmoji Account</li>
+            <li>Open the Bitmoji Chrome Extension</li>
+            <li>
+              Right click on any Bitmoji thumbnail and select copy image address
+              OR open image in new tab
+            </li>
+            <li>Copy and paste the URL in the box below</li>
+            <li>Click on {primaryMoji ? 'Reset Mojis' : 'Find Moji'}!</li>
+          </StepsList>
+        </div>
+      )}
 
-        {logoLoaded && (
-          <div>
-            <h2>How To Get Your Bitmoji URL (For Desktop)</h2>
-            <StepsList>
-              <li>
-                Download and install the{" "}
-                <a href="https://chrome.google.com/webstore/detail/bitmoji/bfgdeiadkckfbkeigkoncpdieiiefpig?hl=en">
-                  Bitmoji Chrome Extension
-                </a>
-              </li>
-              <li>Login with your Snapchat or Bitmoji Account</li>
-              <li>Open the Bitmoji Chrome Extension</li>
-              <li>
-                Right click on any Bitmoji thumbnail and select copy image
-                address OR open image in new tab
-              </li>
-              <li>Copy and paste the URL in the box below</li>
-              <li>Click on {primaryMoji ? "Reset Mojis" : "Find Moji"}!</li>
-            </StepsList>
-          </div>
-        )}
-
-        {logoLoaded && (
-          <FormContainer onSubmit={this.handleSubmit}>
-            <Form.TextArea
-              placeholder="Bitmoji URL"
-              name="url"
-              value={url}
-              onChange={this.handleChange}
-              autoHeight
-              disabled={loading}
-              style={{ minHeight: 150 }}
-            />
-            <Form.Button
-              content={primaryMoji ? "Reset Mojis" : "Find Moji"}
-              disabled={url.trim().length > 0 || loading ? false : true}
-              loading={loading}
-            />
-          </FormContainer>
-        )}
-
-        <Modal
-          open={open}
-          onCloseModal={this.onCloseModal}
-          mojiURL={mojiURL}
-          mojiID={bitmojiID}
-        />
-        {!primaryMoji && logoLoaded && (
-          <Button
-            as={Link}
-            to="/solomoji"
-            onClick={this.skipSetup}
-            content="Skip this step"
+      {logoLoaded && (
+        <FormContainer onSubmit={handleSubmit}>
+          <Form.TextArea
+            placeholder='Bitmoji URL'
+            name='url'
+            value={url}
+            onChange={handleChange}
+            autoHeight
+            disabled={loading}
+            style={{ minHeight: 150 }}
           />
-        )}
-      </HomeContainer>
-    );
-  }
-}
+          <Form.Button
+            content={primaryMoji ? 'Reset Mojis' : 'Find Moji'}
+            disabled={url.trim().length > 0 || loading ? false : true}
+            loading={loading}
+          />
+        </FormContainer>
+      )}
 
-const mapStateToProps = state => ({
-  primaryMoji: state.mojiModal.primaryMoji
-});
+      <Modal
+        open={open}
+        onCloseModal={onCloseModal}
+        mojiURL={mojiURL}
+        mojiID={bitmojiID}
+      />
+      {!primaryMoji && logoLoaded && (
+        <Button
+          as={Link}
+          to='/solomoji'
+          onClick={skipSetup}
+          content='Skip this step'
+        />
+      )}
+    </HomeContainer>
+  );
+};
 
-const mapDispatchToProps = dispatch => ({
-  setPrimaryMojiLocal: mojiID => dispatch(setPrimaryMoji(mojiID)),
-  setSecondaryMojiLocal: mojiID => dispatch(setSecondaryMoji(mojiID))
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home);
+export default Home;
