@@ -1,10 +1,10 @@
 //ACTIONS
-const SET_PRIMARY_MOJI = "SET_PRIMARY_MOJI";
-const SET_SECONDARY_MOJI = "SET_SECONDARY_MOJI";
+const SET_PRIMARY_MOJI = 'SET_PRIMARY_MOJI';
+const SET_SECONDARY_MOJI = 'SET_SECONDARY_MOJI';
 
 const initialState = {
-  primaryMoji: "",
-  secondaryMoji: ""
+  primaryMoji: '',
+  secondaryMoji: ''
 };
 
 // Reducer input === current state
@@ -44,3 +44,7 @@ export function setSecondaryMoji(mojiID) {
     mojiID
   };
 }
+
+//SELECTORS
+export const primaryMojiSelector = state => state.mojiModal.primaryMoji;
+export const secondaryMojiSelector = state => state.mojiModal.secondaryMoji;

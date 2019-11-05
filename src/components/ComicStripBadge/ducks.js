@@ -1,12 +1,12 @@
-import { arrayMove } from "react-sortable-hoc";
+import { arrayMove } from 'react-sortable-hoc';
 
 //ACTIONS
-const ADD_TO_COMIC_STRIP = "ADD_TO_COMIC_STRIP";
-const REMOVE_FROM_COMIC_STRIP = "REMOVE_FROM_COMIC_STRIP";
-const MOVE_COMIC_PANEL = "MOVE_COMIC_PANEL";
-const CLEAR_COMIC_STRIP = "CLEAR_COMIC_STRIP";
-const UPDATE_COMIC_TEXT = "UPDATE_COMIC_TEXT";
-const PROCESS_COMIC_STRIP = "PROCESS_COMIC_STRIP";
+const ADD_TO_COMIC_STRIP = 'ADD_TO_COMIC_STRIP';
+const REMOVE_FROM_COMIC_STRIP = 'REMOVE_FROM_COMIC_STRIP';
+const MOVE_COMIC_PANEL = 'MOVE_COMIC_PANEL';
+const CLEAR_COMIC_STRIP = 'CLEAR_COMIC_STRIP';
+const UPDATE_COMIC_TEXT = 'UPDATE_COMIC_TEXT';
+const PROCESS_COMIC_STRIP = 'PROCESS_COMIC_STRIP';
 
 export const initialState = {
   comicStrip: [],
@@ -27,7 +27,7 @@ export function reducer(state = initialState, action) {
         url,
         uniqueIdentifier,
         comicId,
-        text: ""
+        text: ''
       });
       return {
         ...state,

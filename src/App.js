@@ -1,27 +1,29 @@
-import React, { Component } from "react";
-import "./App.css";
+import React from 'react';
+import './App.css';
 
-import Home from "./containers/Home";
-import Mojis from "./containers/Mojis";
-import ComicStrip from "./containers/ComicStrip";
+import Home from './containers/Home';
+import Mojis from './containers/Mojis';
+import ComicStrip from './containers/ComicStrip';
 
 // Toasts
-import { ToastContainer } from "react-toastify";
+import { ToastContainer } from 'react-toastify';
 
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 // Redux
-import { connect } from "react-redux";
+import { useSelector } from 'react-redux';
 
-import styled from "styled-components/macro";
+import styled from 'styled-components/macro';
 
-import { addBackToTop } from "vanilla-back-to-top";
+import { addBackToTop } from 'vanilla-back-to-top';
 
-import ComicStripBadge from "./components/ComicStripBadge";
+import ComicStripBadge from './components/ComicStripBadge';
 
-import posed from "react-pose";
+import posed from 'react-pose';
 
-import { isMobileDevice } from "./data/variables";
+import { isMobileDevice } from './data/variables';
+
+import { primaryMojiSelector } from './components/Modal/ducks';
 
 const RouterContainer = styled.div`
   width: 80%;
@@ -71,78 +73,71 @@ const PopAndHover = posed.div({
   }
 });
 
-class App extends Component {
-  render() {
-    const { primaryMoji } = this.props;
-    addBackToTop();
+const App = () => {
+  const primaryMoji = useSelector(primaryMojiSelector);
+  addBackToTop();
 
-    return (
-      <div className="App">
-        <div className="App-header">
-          <Router>
-            <RouterContainer>
+  return (
+    <div className='App'>
+      <div className='App-header'>
+        <Router>
+          <RouterContainer>
+            {primaryMoji && (
+              <Header>
+                <Navbar>
+                  <PopAndHover>
+                    <Link to='/solomoji'>SoloMoji</Link>
+                  </PopAndHover>
+                  <PopAndHover>
+                    <Link to='/'>Home</Link>
+                  </PopAndHover>
+                  <PopAndHover>
+                    <Link to='/duomoji'>DuoMoji</Link>
+                  </PopAndHover>
+                </Navbar>
+                <ComicStripBadge />
+              </Header>
+            )}
+
+            <Content>
+              <Route
+                exact={primaryMoji ? true : false}
+                path='/'
+                component={() => <Home />}
+              />
+
               {primaryMoji && (
-                <Header>
-                  <Navbar>
-                    <PopAndHover>
-                      <Link to="/solomoji">SoloMoji</Link>
-                    </PopAndHover>
-                    <PopAndHover>
-                      <Link to="/">Home</Link>
-                    </PopAndHover>
-                    <PopAndHover>
-                      <Link to="/duomoji">DuoMoji</Link>
-                    </PopAndHover>
-                  </Navbar>
-                  <ComicStripBadge />
-                </Header>
-              )}
-              {/* <ComicStripBadge /> */}
-
-              <Content>
-                <Route
-                  exact={primaryMoji ? true : false}
-                  path="/"
-                  component={Home}
-                />
-                {primaryMoji && (
-                  <Route exact path="/solomoji" component={Mojis} />
-                )}
-                {primaryMoji && (
+                <>
+                  <Route exact path='/solomoji' render={() => <Mojis />} />
                   <Route
-                    path="/duomoji"
+                    path='/duomoji'
                     exact
-                    render={() => <Mojis isFriendMoji={true} />}
+                    component={() => <Mojis isFriendMoji={true} />}
                   />
-                )}
-                {primaryMoji && (
-                  <Route path="/comic-strip" exact component={ComicStrip} />
-                )}
-              </Content>
-            </RouterContainer>
-          </Router>
-        </div>
-        <ToastContainer
-          position="bottom-center"
-          autoClose={2000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnVisibilityChange
-          draggable
-          pauseOnHover
-        />
+                  <Route
+                    path='/comic-strip'
+                    exact
+                    component={() => <ComicStrip />}
+                  />
+                </>
+              )}
+            </Content>
+          </RouterContainer>
+        </Router>
       </div>
-    );
-  }
-}
+      <ToastContainer
+        position='bottom-center'
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnVisibilityChange
+        draggable
+        pauseOnHover
+      />
+    </div>
+  );
+};
 
-const mapStateToProps = state => ({
-  primaryMoji: state.mojiModal.primaryMoji
-});
-
-export default connect(
-  mapStateToProps,
-  null
-)(App);
+export default App;

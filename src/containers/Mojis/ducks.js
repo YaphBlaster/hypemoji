@@ -1,5 +1,5 @@
 //ACTIONS
-const SET_MOJI_OBJECTS = "SET_MOJI_OBJECTS";
+const SET_MOJI_OBJECTS = 'SET_MOJI_OBJECTS';
 
 const initialState = {
   soloMojis: null,
@@ -32,3 +32,7 @@ export function setMojiObjects(soloMojis, duoMojis) {
     duoMojis
   };
 }
+
+//SELECTORS
+export const soloMojisSelector = state => state.mojiObjects.soloMojis;
+export const duoMojisSelector = state => state.mojiObjects.duoMojis;
