@@ -1,15 +1,16 @@
-import React, { Component } from "react";
-import { Icon, Label } from "semantic-ui-react";
+import React from 'react';
+import { Icon, Label } from 'semantic-ui-react';
 
-import { connect } from "react-redux";
+import { useSelector } from 'react-redux';
 
-import styled from "styled-components/macro";
+import styled from 'styled-components/macro';
 
-import posed from "react-pose";
+import posed from 'react-pose';
 
-import { isMobileDevice } from "../../data/variables";
+import { isMobileDevice } from '../../data/variables';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import { stripLengthSelector } from './ducks';
 
 const PopAndHover = posed.div({
   pressable: true,
@@ -39,30 +40,18 @@ const BadgeContent = styled.div`
   transition: 0.3s all;
 `;
 
-class ComicStripBadge extends Component {
-  state = {};
+const ComicStripBadge = () => {
+  const stripLength = useSelector(stripLengthSelector);
+  return (
+    <Badge>
+      <Label color='teal' size='medium' pointing as={Link} to='/comic-strip'>
+        <BadgeContent>
+          <Icon name='film' />
+          <Label.Detail>{stripLength}</Label.Detail>
+        </BadgeContent>
+      </Label>
+    </Badge>
+  );
+};
 
-  render() {
-    const { stripLength } = this.props;
-    return (
-      <Badge>
-        <Label color="teal" size="medium" pointing as={Link} to="/comic-strip">
-          <BadgeContent>
-            <Icon name="film" />
-            <Label.Detail>{stripLength}</Label.Detail>
-          </BadgeContent>
-        </Label>
-      </Badge>
-    );
-  }
-}
-
-const mapStateToProps = state => ({
-  comicStrip: state.comicStrip.comicStrip,
-  stripLength: state.comicStrip.stripLength
-});
-
-export default connect(
-  mapStateToProps,
-  null
-)(ComicStripBadge);
+export default ComicStripBadge;

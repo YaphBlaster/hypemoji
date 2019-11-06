@@ -1,25 +1,30 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from 'react';
 
-import { getMojisApi } from "../../data/variables";
+import { getMojisApi } from '../../data/variables';
 
-import axios from "axios";
+import axios from 'axios';
 
-import Loader from "react-loaders";
+import Loader from 'react-loaders';
 
-import { connect } from "react-redux";
-import { setPrimaryMoji, setSecondaryMoji } from "../../components/Modal/ducks";
-import { setMojiObjects } from "./ducks";
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  setPrimaryMoji,
+  setSecondaryMoji,
+  primaryMojiSelector,
+  secondaryMojiSelector
+} from '../../components/Modal/ducks';
+import { setMojiObjects, soloMojisSelector, duoMojisSelector } from './ducks';
 
-import styled from "styled-components/macro";
+import styled from 'styled-components/macro';
 
-import { Pagination, Icon, Button, Input } from "semantic-ui-react";
+import { Pagination, Icon, Button, Input } from 'semantic-ui-react';
 
 // Bitmoji Image
-import MojiImage from "../../components/MojiImage";
+import MojiImage from '../../components/MojiImage';
 
-import OnImagesLoaded from "react-on-images-loaded";
+import OnImagesLoaded from 'react-on-images-loaded';
 
-const SPACING = "40px";
+const SPACING = '40px';
 const ImageGrid = styled.div`
   display: grid;
   max-width: 865px;
@@ -66,99 +71,90 @@ const SearchBar = styled(Input)`
   margin: 10px;
 `;
 
-class Mojis extends Component {
-  state = {
-    loaded: false,
-    start: 0,
-    activePage: 1,
-    searchTerm: ""
-  };
+const Mojis = ({ isFriendMoji }) => {
+  const [loadedMojis, setLoadedMojis] = useState(false);
+  const [mojis, setMojis] = useState(null);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [start, setStart] = useState(0);
+  const [activatePage, setActivatePage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [originalMojis, setOriginalMojis] = useState(null);
+  const soloMojis = useSelector(soloMojisSelector);
+  const duoMojis = useSelector(duoMojisSelector);
+  const primaryMoji = useSelector(primaryMojiSelector);
+  const secondaryMoji = useSelector(secondaryMojiSelector);
+  const dispatch = useDispatch();
 
-  componentDidMount() {
-    const { soloMojis, duoMojis, isFriendMoji } = this.props;
+  useEffect(() => {
+    const getTemplateMojis = async () => {
+      const response = await axios.get(getMojisApi);
+      const { friends, imoji } = response.data.body;
+
+      let soloMojiObject = {};
+      let duoMojiObject = {};
+      let mojiObject = {};
+
+      imoji.forEach(moji => {
+        if (!soloMojiObject[moji.comic_id]) {
+          soloMojiObject[moji.comic_id] = moji;
+        }
+      });
+
+      friends.forEach(moji => {
+        if (!duoMojiObject[moji.comic_id]) {
+          duoMojiObject[moji.comic_id] = moji;
+        }
+      });
+
+      if (isFriendMoji) {
+        mojiObject = duoMojiObject;
+      } else {
+        mojiObject = soloMojiObject;
+      }
+
+      setMojis(mojiObject);
+      setOriginalMojis(mojiObject);
+      setLoadedMojis(true);
+
+      dispatch(setMojiObjects(soloMojiObject, duoMojiObject));
+    };
 
     if (soloMojis && duoMojis && isFriendMoji) {
-      this.setState({
-        mojis: duoMojis,
-        originalMojis: duoMojis,
-        loadedMojis: true
-      });
+      setMojis(duoMojis);
+      setOriginalMojis(duoMojis);
+      setLoadedMojis(true);
     } else if (soloMojis && duoMojis) {
-      this.setState({
-        mojis: soloMojis,
-        originalMojis: soloMojis,
-        loadedMojis: true
-      });
+      setMojis(soloMojis);
+      setOriginalMojis(soloMojis);
+      setLoadedMojis(true);
     } else {
-      this.getTemplateMojis();
+      getTemplateMojis();
     }
-  }
+  }, [dispatch, duoMojis, isFriendMoji, loadedMojis, soloMojis]);
 
-  getTemplateMojis = async () => {
-    const response = await axios.get(getMojisApi);
-    const { friends, imoji } = response.data.body;
-
-    const { isFriendMoji } = this.props;
-
-    let soloMojiObject = {};
-    let duoMojiObject = {};
-    let mojiObject = {};
-
-    imoji.forEach(moji => {
-      if (!soloMojiObject[moji.comic_id]) {
-        soloMojiObject[moji.comic_id] = moji;
-      }
-    });
-
-    friends.forEach(moji => {
-      if (!duoMojiObject[moji.comic_id]) {
-        duoMojiObject[moji.comic_id] = moji;
-      }
-    });
-
-    if (isFriendMoji) {
-      mojiObject = duoMojiObject;
-    } else {
-      mojiObject = soloMojiObject;
-    }
-
-    this.setState({
-      mojis: mojiObject,
-      originalMojis: mojiObject,
-      loadedMojis: true
-    });
-
-    this.props.setMojiObjectsLocal(soloMojiObject, duoMojiObject);
+  const handlePaginationChange = (e, { activePage }) => {
+    setActivatePage(activePage);
+    setStart((activatePage - 1) * 25);
   };
 
-  handlePaginationChange = (e, { activePage }) => {
-    this.setState({
-      activePage,
-      start: (activePage - 1) * 25
-    });
+  const switchMojis = () => {
+    const newPrimary = secondaryMoji;
+    const newSecondary = primaryMoji;
+
+    dispatch(setPrimaryMoji(newPrimary));
+    dispatch(setSecondaryMoji(newSecondary));
   };
 
-  switchMojis = () => {
-    const newPrimary = this.props.secondaryMoji;
-    const newSecondary = this.props.primaryMoji;
+  const searchMojis = (event, { name, value }) => {
+    setSearchTerm(value.toLowerCase());
+    setActivatePage(1);
+    setStart((activatePage - 1) * 25);
 
-    this.props.setPrimaryMojiLocal(newPrimary);
-    this.props.setSecondaryMojiLocal(newSecondary);
+    getSearchText(value);
   };
 
-  searchMojis = (event, { name, value }) => {
-    this.setState({
-      [name]: value.toLowerCase(),
-      activePage: 1,
-      start: (this.state.activePage - 1) * 25
-    });
-
-    this.getSearchText(value);
-  };
-
-  getSearchText = searchTerm => {
+  const getSearchText = searchTerm => {
     const lowerText = searchTerm.toLowerCase();
-    const { originalMojis } = this.state;
 
     let newMojis = [];
 
@@ -173,101 +169,74 @@ class Mojis extends Component {
     this.setState({ mojis: newMojis });
   };
 
-  clear = event => {
-    this.setState({ searchTerm: "" });
-    this.searchMojis(event, { name: "searchTerm", value: "" });
+  const clear = event => {
+    setSearchTerm('');
+    searchMojis(event, { name: 'searchTerm', value: '' });
   };
 
-  render() {
-    const { loadedMojis, start, mojis, searchTerm, imagesLoaded } = this.state;
-    const { primaryMoji, secondaryMoji, isFriendMoji } = this.props;
+  return loadedMojis && mojis ? (
+    <Container>
+      {secondaryMoji && imagesLoaded && (
+        <SwitchButton
+          basic
+          color='teal'
+          content='switch'
+          onClick={switchMojis}
+        />
+      )}
 
-    return loadedMojis && mojis ? (
-      <Container>
-        {secondaryMoji && imagesLoaded && (
-          <SwitchButton
-            basic
-            color="teal"
-            content="switch"
-            onClick={this.switchMojis}
-          />
-        )}
+      {imagesLoaded && (
+        <SearchBar
+          onChange={searchMojis}
+          name='searchTerm'
+          value={searchTerm}
+          label={<Button icon='x' color='teal' onClick={clear} />}
+          labelPosition='right'
+        />
+      )}
 
-        {imagesLoaded && (
-          <SearchBar
-            onChange={this.searchMojis}
-            name="searchTerm"
-            value={searchTerm}
-            label={<Button icon="x" color="teal" onClick={this.clear} />}
-            labelPosition="right"
-          />
-        )}
-
-        <OnImagesLoaded
-          onLoaded={() => this.setState({ imagesLoaded: true })}
-          timeout={7000}
-        >
-          <ImageGrid style={!imagesLoaded ? { display: "none" } : null}>
-            {Object.values(mojis)
-              .slice(start, start + 25)
-              .map((moji, index) => {
-                let { src, comic_id } = moji;
+      <OnImagesLoaded onLoaded={() => setImagesLoaded(true)} timeout={7000}>
+        <ImageGrid style={!imagesLoaded ? { display: 'none' } : null}>
+          {Object.values(mojis)
+            .slice(start, start + 25)
+            .map((moji, index) => {
+              let { src, comic_id } = moji;
+              src = src.replace(/%s/, primaryMoji);
+              if (isFriendMoji && secondaryMoji) {
+                src = src.replace(/%s/, secondaryMoji);
+              } else if (isFriendMoji && !secondaryMoji) {
                 src = src.replace(/%s/, primaryMoji);
-                if (isFriendMoji && secondaryMoji) {
-                  src = src.replace(/%s/, secondaryMoji);
-                } else if (isFriendMoji && !secondaryMoji) {
-                  src = src.replace(/%s/, primaryMoji);
-                }
-                return (
-                  <MojiImage source={src} key={index} comicID={comic_id} />
-                );
-              })}
-          </ImageGrid>
-          {!imagesLoaded && <LoaderContainer type="pacman" active />}
-        </OnImagesLoaded>
-        {imagesLoaded && (
-          <PaginationContainer
-            boundaryRange={0}
-            defaultActivePage={1}
-            ellipsisItem={null}
-            firstItem={{
-              content: <Icon name="angle double left" />,
-              icon: true
-            }}
-            lastItem={{
-              content: <Icon name="angle double right" />,
-              icon: true
-            }}
-            prevItem={{ content: <Icon name="angle left" />, icon: true }}
-            nextItem={{ content: <Icon name="angle right" />, icon: true }}
-            siblingRange={1}
-            totalPages={Math.ceil(Object.values(mojis).length / 25)}
-            onPageChange={this.handlePaginationChange}
-            secondary
-          />
-        )}
-      </Container>
-    ) : (
-      <LoaderContainer type="pacman" active />
-    );
-  }
-}
+              }
+              return <MojiImage source={src} key={index} comicID={comic_id} />;
+            })}
+        </ImageGrid>
+        {!imagesLoaded && <LoaderContainer type='pacman' active />}
+      </OnImagesLoaded>
+      {imagesLoaded && (
+        <PaginationContainer
+          boundaryRange={0}
+          defaultActivePage={1}
+          ellipsisItem={null}
+          firstItem={{
+            content: <Icon name='angle double left' />,
+            icon: true
+          }}
+          lastItem={{
+            content: <Icon name='angle double right' />,
+            icon: true
+          }}
+          prevItem={{ content: <Icon name='angle left' />, icon: true }}
+          nextItem={{ content: <Icon name='angle right' />, icon: true }}
+          siblingRange={1}
+          totalPages={Math.ceil(Object.values(mojis).length / 25)}
+          onPageChange={handlePaginationChange}
+          secondary
+        />
+      )}
+    </Container>
+  ) : (
+    <LoaderContainer type='pacman' active />
+  );
+};
 
-const mapStateToProps = state => ({
-  primaryMoji: state.mojiModal.primaryMoji,
-  secondaryMoji: state.mojiModal.secondaryMoji,
-  soloMojis: state.mojiObjects.soloMojis,
-  duoMojis: state.mojiObjects.duoMojis
-});
-
-const mapDispatchToProps = dispatch => ({
-  setPrimaryMojiLocal: mojiID => dispatch(setPrimaryMoji(mojiID)),
-  setSecondaryMojiLocal: mojiID => dispatch(setSecondaryMoji(mojiID)),
-  setMojiObjectsLocal: (soloMojisObject, duoMojisObject) =>
-    dispatch(setMojiObjects(soloMojisObject, duoMojisObject))
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Mojis);
+export default Mojis;

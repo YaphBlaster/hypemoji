@@ -140,3 +140,7 @@ export function setProcessingComicStrip(isProcessing) {
     isProcessing
   };
 }
+
+//SELECTORS
+export const comicStripSelector = state => state.comicStrip.comicStrip;
+export const stripLengthSelector = state => state.comicStrip.stripLength;

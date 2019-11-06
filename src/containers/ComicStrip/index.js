@@ -1,27 +1,27 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { Button } from "semantic-ui-react";
-import { connect } from "react-redux";
+import { Button } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 
-import axios from "axios";
+import axios from 'axios';
 
-import { createComicAPI } from "../../data/variables";
+import { createComicAPI } from '../../data/variables';
 
 import {
   moveComicPanel,
   clearComicStrip,
   setProcessingComicStrip
-} from "../../components/ComicStripBadge/ducks";
+} from '../../components/ComicStripBadge/ducks';
 
-import styled from "styled-components/macro";
+import styled from 'styled-components/macro';
 
-import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 
-import { CopyToClipboard } from "react-copy-to-clipboard";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
-import StripItem from "../../components/StripItem";
+import StripItem from '../../components/StripItem';
 
 const SortableItem = SortableElement(({ value, id, text }) => (
   <StripItem url={value} id={id} text={text} />
@@ -100,7 +100,7 @@ class ComicStrip extends Component {
 
     this.props.setProcessingComicStripLocal(false);
 
-    toast.info("Created Comic Strip!");
+    toast.info('Created Comic Strip!');
     this.clear();
   };
 
@@ -116,7 +116,7 @@ class ComicStrip extends Component {
   };
 
   copyLink = () => {
-    toast.info("Copied To Clipboard!");
+    toast.info('Copied To Clipboard!');
   };
 
   render() {
@@ -127,7 +127,7 @@ class ComicStrip extends Component {
         <div>
           {comicStrip.length <= 0 &&
             !processedComicURL &&
-            "Nothing here yet, add some comic panels!"}
+            'Nothing here yet, add some comic panels!'}
         </div>
         <ComicStripList>
           {comicStrip.length > 0 && !processedComicURL && (
@@ -141,7 +141,7 @@ class ComicStrip extends Component {
 
           {processedComicURL && (
             <Strip>
-              <StripImage src={processedComicURL} alt="" />
+              <StripImage src={processedComicURL} alt='' />
             </Strip>
           )}
         </ComicStripList>
@@ -151,21 +151,21 @@ class ComicStrip extends Component {
             <Button
               onClick={this.clear}
               disabled={processingComicStrip}
-              content="Clear Comic Strip"
+              content='Clear Comic Strip'
               secondary
             />
             <Button
               onClick={this.createComic}
               loading={processingComicStrip}
               disabled={processingComicStrip}
-              content="Create Comic Strip"
+              content='Create Comic Strip'
               secondary
             />
           </ButtonsContainer>
         )}
         {processedComicURL && (
           <CopyToClipboard text={processedComicURL} onCopy={this.copyLink}>
-            <Button content="Copy To Clipboard" inverted color="teal" />
+            <Button content='Copy To Clipboard' inverted color='teal' />
           </CopyToClipboard>
         )}
       </div>
