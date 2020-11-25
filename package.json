@@ -1,9 +1,16 @@
 {
   "name": "hypemoji",
   "version": "0.1.0",
+  "main": "public/electron.js",
+  "description": "BitMoji Comic Maker",
+  "author":"YaphBlaster",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "cross-env": "^7.0.2",
+    "electron-is-dev": "^1.2.0",
+    "electron-squirrel-startup": "^1.0.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.9.1",
     "loaders.css": "^0.1.2",
@@ -29,11 +36,15 @@
     "vanilla-back-to-top": "^7.2.0"
   },
   "scripts": {
+    "dev": "concurrently -k \"cross-env BROWSER=none yarn start\" \"yarn:electron\"",
+    "electron": "wait-on tcp:3000 && electron-forge start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lt.surge": "react-scripts build && mv ./build/index.html ./build/200.html && surge --domain hypemoji.surge.sh ./build"
+    "lt.surge": "react-scripts build && mv ./build/index.html ./build/200.html && surge --domain hypemoji.surge.sh ./build",
+    "package": "react-scripts build && electron-forge package",
+    "make": "react-scripts build && electron-forge make"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -43,5 +54,47 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.54",
+    "@electron-forge/maker-deb": "^6.0.0-beta.54",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.54",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
+    "@electron-forge/maker-zip": "^6.0.0-beta.54",
+    "concurrently": "^5.3.0",
+    "electron": "^11.0.3",
+    "electron-devtools-installer": "^3.1.1",
+    "electron-icon-maker": "^0.0.5",
+    "wait-on": "^5.2.0"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "icon": "src/icons/win/icon.ico",
+        "name": "HypeMoji"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "hypemoji"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  }
 }

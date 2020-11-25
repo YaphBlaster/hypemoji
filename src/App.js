@@ -67,8 +67,8 @@ const PopAndHover = posed.div({
   init: { scale: 1 },
   press: { scale: 1.1 },
   hover: {
-    scale: 1.2
-  }
+    scale: 1.2,
+  },
 });
 
 class App extends Component {
@@ -138,8 +138,8 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  primaryMoji: state.mojiModal.primaryMoji
+const mapStateToProps = (state) => ({
+  primaryMoji: state.mojiModal.primaryMoji,
 });
 
 export default connect(
